@@ -25,9 +25,9 @@ namespace lito {
 	template <class T> T cofactor ( const Matriz_3<T> &m, size_t id );
 	template <class T> T cofactor ( const Matriz_4<T> &m, size_t id );
 	
-	template <class T> Matriz_2<T> inverse ( const Matriz_2<T> &m );
-	template <class T> Matriz_3<T> inverse ( const Matriz_3<T> &m );
-	template <class T> Matriz_4<T> inverse ( const Matriz_4<T> &m );
+	template <class T> Matriz_2<T> invert ( const Matriz_2<T> &m );
+	template <class T> Matriz_3<T> invert ( const Matriz_3<T> &m );
+	template <class T> Matriz_4<T> invert ( const Matriz_4<T> &m );
 	
 	/*********************************************************************************************************************************/
 	/*********************************************************************************************************************************/
@@ -46,7 +46,12 @@ namespace lito {
 	{
 		return ( m._val[0] * m._val[3] ) - ( m._val[1] * m._val[2] );
 	}
-	/*===============================================================================================================================*/
+	
+	/*! determinant
+	* Calculate the determinant of matrix 3x3
+	* Matriz_3<T> m: Matrix 3x3
+	* return: Determinant of m
+	*/
 	template <class T>
 	T determinant ( const Matriz_3<T> &m )
 	{
@@ -57,13 +62,23 @@ namespace lito {
 		       - ( m._val[0] * m._val[7] * m._val[5] )
 		       - ( m._val[3] * m._val[1] * m._val[8] );
 	}
-	/*===============================================================================================================================*/
+	
+	/*! determinant
+	* Calculate the determinant of matrix 4x4
+	* Matriz_4<T> m: Matrix 4x4
+	* return: Determinant of m
+	*/
 	template <class T>
 	T determinant ( const Matriz_4<T> &m )
 	{
 		return ;
 	}
-	/*===============================================================================================================================*/
+	
+	/*! transpose
+	* Calculate the transposed matrix of matrix 2x2
+	* Matriz_2<T> m: Matrix 2x2
+	* return: m transposed
+	*/
 	template <class T>
 	Matriz_2<T> transpose ( const Matriz_2<T> &m ) {
 		Matriz_2<T> trasnpo;
@@ -76,7 +91,12 @@ namespace lito {
 		
 		return trasnpo;
 	}
-	/*===============================================================================================================================*/
+	
+	/*! transpose
+	* Calculate the transposed matrix of matrix 3x3
+	* Matriz_3<T> m: Matrix 3x3
+	* return: m transposed
+	*/
 	template <class T>
 	Matriz_3<T> transpose ( const Matriz_3<T> &m )
 	{
@@ -90,7 +110,12 @@ namespace lito {
 		
 		return trasnpo;
 	}
-	/*===============================================================================================================================*/
+	
+	/*! transpose
+	* Calculate the transposed matrix of matrix 4x4
+	* Matriz_4<T> m: Matrix 4x4
+	* return: m transposed
+	*/
 	template <class T>
 	Matriz_4<T> transpose ( const Matriz_4<T> &m )
 	{
@@ -104,7 +129,12 @@ namespace lito {
 		
 		return trasnpo;
 	}
-	/*===============================================================================================================================*/
+	
+	/*! cofactores
+	* Calculate the cofactor matrix
+	* Matriz_2<T> m: Matrix 2x2
+	* return: Cofactor matrix
+	*/
 	template <class T>
 	Matriz_2<T> cofactores ( const Matriz_2<T> &m, size_t i, size_t j ) {
 		( ( i % 2 ) == 0 ) ? i++ : i-- ;
@@ -112,19 +142,35 @@ namespace lito {
 		
 		return ( ( ( i + j ) % 2 ) == 0 ) ? +m._val[i + ( j * 2 )] : -m._val[i + ( j * 2 )];
 	}
-	/*===============================================================================================================================*/
+	
+	/*! cofactores
+	* Calculate the cofactor matrix
+	* Matriz_3<T> m: Matrix 3x3
+	* return: Cofactor matrix
+	*/
 	template <class T>
 	T cofactor ( const Matriz_3<T> &m, size_t i, size_t j )
 	{
 		
 	}
-	/*===============================================================================================================================*/
+	
+	/*! cofactores
+	* Calculate the cofactor matrix
+	* Matriz_4<T> m: Matrix 4x4
+	* return: Cofactor matrix
+	*/
 	template <class T>
 	T cofactor ( const Matriz_4<T> &m, size_t i, size_t j )
 	{
 	
 	}
-	/*===============================================================================================================================*/
+	
+	/*! cofactor
+	* Calculate the cofactor of id in matrix
+	* Matriz_2<T> m: Matrix 2x2
+	* size_t id: Id of the cofactor
+	* return: The value of cofactor
+	*/
 	template <class T>
 	T cofactor ( const Matriz_2<T> &m, size_t id )
 	{
@@ -146,7 +192,13 @@ namespace lito {
 		
 		return T(0);
 	}
-	/*===============================================================================================================================*/
+	
+	/*! cofactor
+	* Calculate the cofactor of id in matrix
+	* Matriz_3<T> m: Matrix 3x3
+	* size_t id: Id of the cofactor
+	* return: The value of cofactor
+	*/
 	template <class T>
 	T cofactor ( const Matriz_3<T> &m, size_t id )
 	{
@@ -192,7 +244,13 @@ namespace lito {
 		
 		return T(0);
 	}
-	/*===============================================================================================================================*/
+	
+	/*! cofactor
+	* Calculate the cofactor of id in matrix
+	* Matriz_4<T> m: Matrix 4x4
+	* size_t id: Id of the cofactor
+	* return: The value of cofactor
+	*/
 	template <class T>
 	T cofactor ( const Matriz_4<T> &m, size_t id )
 	{
@@ -282,9 +340,14 @@ namespace lito {
 		
 		return T(0);
 	}
-	/*===============================================================================================================================*/
+	
+	/*! invert
+	* Calculate the inverted matrix
+	* Matriz_2<T> m: Matrix to be inverted
+	* return: The inverted matrix
+	*/
 	template <class T>
-	Matriz_2<T> inverse ( const Matriz_2<T> &m )
+	Matriz_2<T> invert ( const Matriz_2<T> &m )
 	{
 		Matriz_2<T> inver;
 		T constante;
@@ -300,17 +363,26 @@ namespace lito {
 		
 		return inver;
 	}
-	/*===============================================================================================================================*/
+	
+	/*! invert
+	* Calculate the inverted matrix
+	* Matriz_3<T> m: Matrix to be inverted
+	* return: The inverted matrix
+	*/
 	template <class T>
-	Matriz_3<T> inverse ( const Matriz_3<T> &m )
+	Matriz_3<T> invert ( const Matriz_3<T> &m )
 	{
 	}
-	/*===============================================================================================================================*/
+	
+	/*! invert
+	* Calculate the inverted matrix
+	* Matriz_4<T> m: Matrix to be inverted
+	* return: The inverted matrix
+	*/
 	template <class T>
-	Matriz_4<T> inverse ( const Matriz_4<T> &m )
+	Matriz_4<T> invert ( const Matriz_4<T> &m )
 	{
 	}
-	/*===============================================================================================================================*/
 
 
 }

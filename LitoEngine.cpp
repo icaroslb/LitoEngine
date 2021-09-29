@@ -36,7 +36,7 @@ int main()
 	catch (lito::MatrixException me)
 	{
 		me.showExeception();
-		std::cout << teste3;
+		std::cout << 1.0f + teste1 << 1.0f - teste1;
 	}
 	return 0;
 }

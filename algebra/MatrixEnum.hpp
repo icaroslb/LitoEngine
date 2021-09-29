@@ -7,7 +7,7 @@ namespace lito {
 
 	enum class MatrixType { IDENTITY, ZEROS, ONES };
 	enum class Ori_transf { xy, yz, zx };
-	enum class MatrixExceptionType { INVALID_ACCESS, INCOMPATIBLE_SIZES };
+	enum class MatrixExceptionType { INVALID_ACCESS, INVALID_SIZE, INCOMPATIBLE_SIZES, MATRIX_NOT_INITIALIZED };
 
 }
 
