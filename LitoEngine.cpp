@@ -11,32 +11,26 @@ int main()
 {
 	unsigned int rows = 3;
 	unsigned int columns = 3;
-	float valores[6] = { 1.0f, 2.0f, 4.0f, 5.0f };
+	float mat[9] = { 1.0f, 2.0f, 3.0f,
+		             4.0f, 5.0f, 6.0f,
+	                 7.0f, 8.0f, 9.f};
+	float vec[3] = { 1.0f, 2.0f, 3.0f };
 
-	lito::Matrix<float> teste1(2, 3, valores);
-	lito::Matrix<float> teste2(2, 2, valores);
-	lito::Matrix<float> teste3;
-	lito::Matrix<float> teste4;
+	lito::Matrix<float> matrix(3, 3, mat);
+	lito::Matrix<float> vector(3, 1, vec);
+	lito::Matrix<float> vectort(1, 3, vec);
 
 	try {
-		teste3 = lito::matMul(teste1, teste2);
+		std::cout
+			<< matrix << std::endl
+			<< vector << std::endl
+			<< vectort << std::endl
+			<< lito::matMul(matrix, vector) << std::endl
+			<< lito::matMul(matrix, vectort.transpose()) << std::endl;
 	}
 	catch (lito::MatrixException me)
 	{
 		me.showExeception();
-	}
-	
-	try {
-		std::cout << "Hello CMake."
-			<< teste1 << std::endl
-			<< teste2 << std::endl
-			<< teste3 << std::endl
-			<< (teste4 = teste1 - teste3) << std::endl;
-	}
-	catch (lito::MatrixException me)
-	{
-		me.showExeception();
-		std::cout << 1.0f + teste1 << 1.0f - teste1;
 	}
 	return 0;
 }

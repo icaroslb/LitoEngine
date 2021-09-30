@@ -71,6 +71,8 @@ namespace lito{
 		Matrix<T> operator - (const T& sub);
 		Matrix<T> operator * (const T& mul);
 
+		Matrix<T> transpose ();
+
 		template <typename _T> friend Matrix<_T> operator + (const Matrix<_T>& sum);
 		template <typename _T> friend Matrix<_T> operator - (const Matrix<_T>& sub);
 
@@ -359,6 +361,24 @@ namespace lito{
 			for (uint j = 0; j < _columns; j++)
 				newMatrix(i, j) *= mul;
 	
+		return newMatrix;
+	}
+
+	/*! transpose
+	* Transpose the matrix
+	* return: The mtrix transposed
+	*/
+	template <typename T>
+	Matrix<T> Matrix<T>::transpose()
+	{
+		Matrix<T> newMatrix(_columns, _rows);
+
+		for (uint i = 0; i < _columns; i++)
+		{
+			for (uint j = 0; j < _rows; j++)
+				newMatrix(i, j) = (*this)(j, i);
+		}
+
 		return newMatrix;
 	}
 
