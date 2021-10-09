@@ -72,6 +72,7 @@ namespace lito{
 		Matrix<T> operator + (const Matrix<T>& sum) const;
 		Matrix<T> operator - (const Matrix<T>& sub) const;
 		Matrix<T> operator * (const Matrix<T>& mul) const;
+		Matrix<T> mul (const Matrix<T>& mul) const;
 	
 		Matrix<T> operator + (const T& sum) const;
 		Matrix<T> operator - (const T& sub) const;
@@ -101,7 +102,6 @@ namespace lito{
 		uint _columns;
 		T* _data;
 	};
-	template <typename T> Matrix<T> matMul(const Matrix<T>& matrix1, const Matrix<T>& matrix2);
 	template <typename T> std::ostream& operator << (std::ostream& out, const Matrix<T>& mat);
 	
 
@@ -324,12 +324,41 @@ namespace lito{
 	}
 	
 	/*! operator *
+	* Matrices multiplication
+	* Matrix<T> mul: Matrix to multiply
+	* return: The matrix of multiplication of the matrices
+	*/
+	template <typename T>
+	Matrix<T> Matrix<T>::operator * (const Matrix<T>& mul) const
+	{
+		if (_columns != mul._rows)
+			throw(MatrixException(MatrixExceptionType::INCOMPATIBLE_SIZES, _rows, _columns, mul._rows, mul._columns, 'X'));
+		else if (_data == nullptr || _data == nullptr)
+			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
+
+		Matrix<T> newMatrix(_rows, mul._columns);
+
+		for (uint i = 0; i < _rows; i++)
+		{
+			for (uint j = 0; j < mul._columns; j++)
+			{
+				for (uint k = 0; k < _columns; k++)
+				{
+					newMatrix(i, j) += (*this)(i, k) * mul(k, j);
+				}
+			}
+		}
+
+		return newMatrix;
+	}
+
+	/*! operator *
 	* Multiply the matrices value to value
 	* Matrix<T> mul: Matrix to be multiplied
 	* return: The multiplication of the matrices
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::operator * (const Matrix<T>& mul) const
+	Matrix<T> Matrix<T>::mul (const Matrix<T>& mul) const
 	{
 		if (_rows != mul._rows || _columns != mul._columns)
 			throw(MatrixException(MatrixExceptionType::INCOMPATIBLE_SIZES, _rows, _columns, mul._rows, mul._columns, '*'));
@@ -337,11 +366,11 @@ namespace lito{
 			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
 
 		Matrix<T> newMatrix(_rows, _columns);
-	
+
 		for (uint i = 0; i < _rows; i++)
 			for (uint j = 0; j < _columns; j++)
 				newMatrix(i, j) = (*this)(i, j) * mul(i, j);
-	
+
 		return newMatrix;
 	}
 	
@@ -594,36 +623,6 @@ namespace lito{
 		return newMatrix;
 	}
 	
-	/*! matMul
-	* Matrices multiplication
-	* Matrix<T> matrix1: Matrix to multiply
-	* Matrix<T> matrix2: Matrix to multiply
-	* return: The matrix of multiplication of matrices
-	*/
-	template <typename T>
-	Matrix<T> matMul(const Matrix<T>& matrix1, const Matrix<T>& matrix2)
-	{
-		if (matrix1._columns != matrix2._rows)
-			throw(MatrixException(MatrixExceptionType::INCOMPATIBLE_SIZES, matrix1._rows, matrix1._columns, matrix2._rows, matrix2._columns, 'X'));
-		else if (matrix1._data == nullptr || matrix2._data == nullptr)
-			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
-
-		Matrix<T> newMatrix(matrix1._rows, matrix2._columns);
-	
-		for (uint i = 0; i < matrix1._rows; i++)
-		{
-			for (uint j = 0; j < matrix2._columns; j++)
-			{
-				for (uint k = 0; k < matrix1._columns; k++)
-				{
-					newMatrix(i, j) += matrix1(i, k) * matrix2(k, j);
-				}
-			}
-		}
-	
-		return newMatrix;
-	}
-
 	/*! operator <<
 	* Shows the matrix in console
 	* ostream out: Output stream
