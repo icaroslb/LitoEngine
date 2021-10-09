@@ -18,7 +18,7 @@ int main()
 
 	float matRed[9] = { 1.0f, 2.0f, 3.0f,
 					    0.0f, 0.0f, 6.0f,
-					    0.0f, 1.0f, 5.f };
+					    0.0f, 0.0f, 5.f };
 
 	lito::Matrix<float> matrix(3, 3, mat);
 	lito::Matrix<float> vector(3, 1, vec);
@@ -26,7 +26,7 @@ int main()
 	lito::Matrix<float> matReduction(3, 3, matRed);
 	lito::Matrix<float> rowOperation;
 	lito::Matrix<float> columnOperation;
-	lito::Matrix<float> result = lito::gaussReduction(matReduction, rowOperation, columnOperation);
+	lito::Matrix<float> result = lito::gaussJordanReduction(matReduction, rowOperation, columnOperation);
 
 	//std::get<0>(result)(2, 2) = 10.0f;
 	//matReduction(2, 2) = 10.0f;
@@ -36,9 +36,10 @@ int main()
 			<< result << std::endl
 			<< "Row operation:" << rowOperation << std::endl
 			<< "Column operation:" << columnOperation << std::endl
-			<< matReduction << std::endl
-			<< rowOperation * matReduction << std::endl
-			<< matReduction * columnOperation << std::endl;
+			<< "Matrix to be reducted:" << matReduction << std::endl
+			<< "Rows operations x matrix:"<< rowOperation * matReduction << std::endl
+			<< "matrix x Columns operations"<< matReduction * columnOperation << std::endl
+			<< "Rows operations x matrix x Columns operations" << rowOperation * matReduction * columnOperation << std::endl;
 	}
 	catch (lito::MatrixException me)
 	{

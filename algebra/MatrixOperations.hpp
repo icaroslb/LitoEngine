@@ -8,6 +8,7 @@ namespace lito {
     template <typename T> void partialPivoting(Matrix<T>& M, Matrix<T>& rowOperations, const uint& idLine, const uint& idcolumn, const T error = T(1e-5));
     template <typename T> void totalPivoting(Matrix<T>& M, Matrix<T>& rowOperation, Matrix<T>& columnOperation, const uint& idLine, const uint& idcolumn, const T error = T(1e-5));
     template <typename T> Matrix<T> gaussReduction(const Matrix<T>& M, Matrix<T>& rowOperations, Matrix<T>& columnOperations, const T error = T(1e-5));
+    template <typename T> Matrix<T> gaussJordanReduction(const Matrix<T>& M, Matrix<T>& rowOperations, Matrix<T>& columnOperations, const T error = T(1e-5));
 
 
 
@@ -147,13 +148,66 @@ namespace lito {
         {
             totalPivoting(reduction, rowOperations, columnOperations, i, i, error);
             
-            for (uint j = i + 1; j < reduction.getRows(); j++)
+            if (std::abs(reduction(i, i) > error))
             {
-                if (T(std::abs(reduction(j, i))) > error)
+                for (uint j = i + 1; j < reduction.getRows(); j++)
                 {
-                    mulLine = -(reduction(j, i) / reduction(i, i));
-                    reduction.elementarOperationSumLines(i, j, mulLine);
-                    rowOperations.elementarOperationSumLines(i, j, mulLine);
+                    if (T(std::abs(reduction(j, i))) > error)
+                    {
+                        mulLine = -(reduction(j, i) / reduction(i, i));
+                        reduction.elementarOperationSumLines(i, j, mulLine);
+                        rowOperations.elementarOperationSumLines(i, j, mulLine);
+                    }
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return reduction;
+    }
+
+    /*! gaussJordanReduction
+    * Calculate the Gauss Jordan reduction
+    * Matrix<T> M: The matrix to reduce
+    * Matrix<T> rowOperations: The matrix with rows operations
+    * Matrix<T> columnOperations: The matrix with columns operations
+    * T error: The error value
+    * return: The matrix reducted
+    */
+    template <typename T>
+    Matrix<T> gaussJordanReduction(const Matrix<T>& M, Matrix<T>& rowOperations, Matrix<T>& columnOperations, const T error)
+    {
+        Matrix<T> reduction;
+        T actualMulLine;
+        T mulLine;
+        uint line = M.getRows();
+        uint lineAux;
+
+        reduction = gaussReduction(M, rowOperations, columnOperations, error);
+
+        for (uint i = 0; i < reduction.getRows(); i++)
+        {
+            line = reduction.getRows() - i - 1;
+            actualMulLine = reduction(line, line);
+
+            if (T(std::abs(actualMulLine)) > error)
+            {
+                reduction.elementarOperationMultLine(line, T(1) / actualMulLine);
+                rowOperations.elementarOperationMultLine(line, T(1) / actualMulLine);
+
+                for (uint j = i + 1; j < reduction.getRows(); j++)
+                {
+                    lineAux = reduction.getRows() - j - 1;
+                    mulLine = -reduction(lineAux, line);
+
+                    if (T(std::abs(mulLine)) > error)
+                    {
+                        reduction.elementarOperationSumLines(line, lineAux, mulLine);
+                        rowOperations.elementarOperationSumLines(line, lineAux, mulLine);
+                    }
                 }
             }
         }
