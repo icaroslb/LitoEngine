@@ -5,9 +5,9 @@
 
 namespace lito {
 
-    template <typename T> Matrix<T> partialPivoting(Matrix<T>& M, const uint& idLine, const uint& idcolumn, const T error = T(1e-5));
-    template <typename T> Matrix<T> totalPivoting(Matrix<T>& M, const uint& idLine, const uint& idcolumn, uint* columnOrder = nullptr, const T error = T(1e-5));
-    template <typename T> std::pair<Matrix<T>, uint*> gaussReduction(const Matrix<T>& M, Matrix<T>& operations, const T error = T(1e-5));
+    template <typename T> void partialPivoting(Matrix<T>& M, Matrix<T>& rowOperations, const uint& idLine, const uint& idcolumn, const T error = T(1e-5));
+    template <typename T> void totalPivoting(Matrix<T>& M, Matrix<T>& rowOperation, Matrix<T>& columnOperation, const uint& idLine, const uint& idcolumn, const T error = T(1e-5));
+    template <typename T> Matrix<T> gaussReduction(const Matrix<T>& M, Matrix<T>& rowOperations, Matrix<T>& columnOperations, const T error = T(1e-5));
 
 
 
@@ -17,13 +17,10 @@ namespace lito {
     * uint idLine: The line of the value to be pivoting
     * uint idcolumn: The line of the value to be pivoting
     * T error: The error value
-    * return: The matrix of operation
     */
     template <typename T>
-    Matrix<T> partialPivoting(Matrix<T>& M, const uint& idLine, const uint& idcolumn, const T error)
+    void partialPivoting(Matrix<T>& M, Matrix<T>& rowOperations, const uint& idLine, const uint& idcolumn, const T error)
     {
-        Matrix<T> operation(M.getRows(), M.getColumns, MatrixType::IDENTITY);
-
         if (M(idLine, idcolumn) <= error)
         {
             T valueAuxPivot;
@@ -45,26 +42,23 @@ namespace lito {
             if (valueMaxPivot > error)
             {
                 M.elementarOperationSwitchLines(idLine, idMaxPivot);
-                operation.elementarOperationSwitchLines(idLine, idMaxPivot);
+                rowOperations.elementarOperationSwitchLines(idLine, idMaxPivot);
             }
         }
-
-        return operation;
     }
 
     /*! totalPivoting
     * Calculate total pivoting if the value of idLine and idColumn of the matrix is less than error
     * Matrix<T> M: The matrix to pivote
+    * Matrix<T> rowOperation: The matrix with row operations
+    * Matrix<T> columnOperation: The matrix with column operations
     * uint idLine: The line of the value to be pivoting
-    * uint idcolumn: The line of the value to be pivoting
+    * Matrix<T> idcolumn: The matrix of position
     * T error: The error value
-    * return: The matrix of operation and new order of columns
     */
     template <typename T>
-    Matrix<T> totalPivoting(Matrix<T>& M, const uint& idLine, const uint& idcolumn, uint* columnOrder, const T error)
+    void totalPivoting(Matrix<T>& M, Matrix<T>& rowOperation, Matrix<T>& columnOperation, const uint& idLine, const uint& idcolumn, const T error)
     {
-        Matrix<T> operation(M.getRows(), M.getColumns(), MatrixType::IDENTITY);
-
         if (M(idLine, idcolumn) <= error)
         {
             T valueAuxPivot;
@@ -87,7 +81,7 @@ namespace lito {
             if (valueMaxPivot > error)
             {
                 M.elementarOperationSwitchLines(idLine, idMaxPivot);
-                operation.elementarOperationSwitchLines(idLine, idMaxPivot);
+                rowOperation.elementarOperationSwitchLines(idLine, idMaxPivot);
             }
             else
             {
@@ -104,13 +98,7 @@ namespace lito {
                 if (valueMaxPivot > error)
                 {
                     M.elementarOperationSwitchColumns(idcolumn, idMaxPivot);
-                    if (columnOrder != nullptr)
-                    {
-                        auxColumnOrder = columnOrder[idMaxPivot];
-                        columnOrder[idMaxPivot] = columnOrder[idcolumn];
-                        columnOrder[idcolumn] = auxColumnOrder;
-
-                    }
+                    columnOperation.elementarOperationSwitchColumns(idcolumn, idMaxPivot);
                 }
                 else
                 {
@@ -131,22 +119,14 @@ namespace lito {
                     if (valueMaxPivot > error)
                     {
                         M.elementarOperationSwitchLines(idLine, idMaxPivotLine);
-                        operation.elementarOperationSwitchLines(idLine, idMaxPivot);
+                        rowOperation.elementarOperationSwitchLines(idLine, idMaxPivot);
 
                         M.elementarOperationSwitchColumns(idcolumn, idMaxPivotColumn);
-                        if (columnOrder != nullptr)
-                        {
-                            auxColumnOrder = columnOrder[idMaxPivot];
-                            columnOrder[idMaxPivot] = columnOrder[idcolumn];
-                            columnOrder[idcolumn] = auxColumnOrder;
-
-                        }
+                        columnOperation.elementarOperationSwitchColumns(idcolumn, idMaxPivot);
                     }
                 }
             }
         }
-
-        return operation;
     }
 
     /*! gaussReduction
@@ -154,22 +134,18 @@ namespace lito {
     * Matrix<T> M: The matrix to reduce
     * Matrix<T> operations: The matrix with operations
     * T error: The error value
-    * return: The matrix reducted and the new orde of columns
+    * return: The matrix reducted
     */
     template <typename T>
-    std::pair<Matrix<T>, uint*> gaussReduction(const Matrix<T>& M, Matrix<T>& operations, const T error)
+    Matrix<T> gaussReduction(const Matrix<T>& M, Matrix<T>& rowOperations, Matrix<T>& columnOperations, const T error)
     {
         Matrix<T> reduction = M;
-        operations = Matrix<T>(reduction.getRows(), reduction.getColumns(), MatrixType::IDENTITY);
-        uint* columnOrder = new uint[reduction.getColumns()];
+        columnOperations = rowOperations = Matrix<T>(reduction.getRows(), reduction.getColumns(), MatrixType::IDENTITY);
         T mulLine;
 
-        for (uint i = 0; i < reduction.getColumns(); i++)
-            columnOrder[i] = i;
-        
         for (uint i = 0; i < reduction.getRows(); i++)
         {
-            operations = matMul(totalPivoting(reduction, i, i, columnOrder, error), operations);
+            totalPivoting(reduction, rowOperations, columnOperations, i, i, error);
             
             for (uint j = i + 1; j < reduction.getRows(); j++)
             {
@@ -177,11 +153,11 @@ namespace lito {
                 {
                     mulLine = -(reduction(j, i) / reduction(i, i));
                     reduction.elementarOperationSumLines(i, j, mulLine);
-                    operations.elementarOperationSumLines(i, j, mulLine);
+                    rowOperations.elementarOperationSumLines(i, j, mulLine);
                 }
             }
         }
-        return std::pair<Matrix<T>, uint*>(reduction, columnOrder);
+        return reduction;
     }
 
 }

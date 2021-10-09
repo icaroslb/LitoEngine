@@ -24,18 +24,21 @@ int main()
 	lito::Matrix<float> vector(3, 1, vec);
 	lito::Matrix<float> vectort(1, 3, vec);
 	lito::Matrix<float> matReduction(3, 3, matRed);
-	lito::Matrix<float> matOperation;
-	std::pair<lito::Matrix<float>, lito::uint*> result = lito::gaussReduction(matReduction, matOperation);
+	lito::Matrix<float> rowOperation;
+	lito::Matrix<float> columnOperation;
+	lito::Matrix<float> result = lito::gaussReduction(matReduction, rowOperation, columnOperation);
 
 	//std::get<0>(result)(2, 2) = 10.0f;
 	//matReduction(2, 2) = 10.0f;
 
 	try {
 		std::cout
-			<< std::get<0>(result) << std::endl
-			<< matOperation << std::endl
+			<< result << std::endl
+			<< "Row operation:" << rowOperation << std::endl
+			<< "Column operation:" << columnOperation << std::endl
 			<< matReduction << std::endl
-			<< lito::matMul(matOperation, matReduction) << std::endl;
+			<< rowOperation * matReduction << std::endl
+			<< matReduction * columnOperation << std::endl;
 	}
 	catch (lito::MatrixException me)
 	{
