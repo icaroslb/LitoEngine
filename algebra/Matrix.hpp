@@ -53,25 +53,36 @@ namespace lito{
 	template <typename T>
 	class Matrix {
 	public:
-		Matrix(uint rows = 0, uint columns = 0, const MatrixType& type = MatrixType::ZEROS);
+		Matrix();
+		Matrix(uint rows, uint columns, const MatrixType& type = MatrixType::ZEROS);
 		Matrix(uint rows, uint columns, const T* data);
+		Matrix(const Matrix<T>& copyMatrix);
+		~Matrix();
 
 		Matrix<T>& resize(uint rows, uint columns);
 		
 		T& operator () (const uint& line, const uint& column);
 		const T& operator () (const uint& line, const uint& column) const;
+
+		const uint& getRows() const;
+		const uint& getColumns() const;
 	
 		Matrix<T>& operator = (const Matrix<T>& rec);
 
-		Matrix<T> operator + (const Matrix<T>& sum);
-		Matrix<T> operator - (const Matrix<T>& sub);
-		Matrix<T> operator * (const Matrix<T>& mul);
+		Matrix<T> operator + (const Matrix<T>& sum) const;
+		Matrix<T> operator - (const Matrix<T>& sub) const;
+		Matrix<T> operator * (const Matrix<T>& mul) const;
 	
-		Matrix<T> operator + (const T& sum);
-		Matrix<T> operator - (const T& sub);
-		Matrix<T> operator * (const T& mul);
+		Matrix<T> operator + (const T& sum) const;
+		Matrix<T> operator - (const T& sub) const;
+		Matrix<T> operator * (const T& mul) const;
 
-		Matrix<T> transpose ();
+		Matrix<T> transpose () const;
+
+		Matrix<T>& elementarOperationSumLines(const uint &lineMult, const uint &lineSum, const T &constMult = T(1));
+		Matrix<T>& elementarOperationMultLine(const uint &line, const T &constMult = T(1));
+		Matrix<T>& elementarOperationSwitchLines(const uint& line1, const uint& line2);
+		Matrix<T>& elementarOperationSwitchColumns(const uint& column1, const uint& column2);
 
 		template <typename _T> friend Matrix<_T> operator + (const Matrix<_T>& sum);
 		template <typename _T> friend Matrix<_T> operator - (const Matrix<_T>& sub);
@@ -96,6 +107,16 @@ namespace lito{
 
 
 	/*! Matrix
+	* Default initialization of the matrix
+	*/
+	template <typename T>
+	Matrix<T>::Matrix()
+		: _rows(0)
+		, _columns(0)
+		, _data(nullptr)
+	{}
+
+	/*! Matrix
 	* Initialize the matrix for types specifiques
 	* uint rows: Quantities of rows
 	* uint columns: Quantities of columns
@@ -103,18 +124,9 @@ namespace lito{
 	*/
 	template <typename T>
 	Matrix<T>::Matrix(uint rows, uint columns, const MatrixType& type)
-		: _rows(0)
-		, _columns(0)
-		, _data(nullptr)
+		: Matrix()
 	{
-		try
-		{
-			resize(rows, columns);
-		}
-		catch (const MatrixException& me)
-		{
-			throw(me);
-		}
+		resize(rows, columns);
 
 		if (_data != nullptr) {
 			switch (type)
@@ -142,20 +154,34 @@ namespace lito{
 	*/
 	template <typename T>
 	Matrix<T>::Matrix(uint rows, uint columns, const T* data)
-		: _rows(0)
-		, _columns(0)
-		, _data(nullptr)
+		: Matrix()
 	{
-		try
-		{
-			resize(rows, columns);
-		}
-		catch (const MatrixException& me)
-		{
-			throw(me);
-		}
+		resize(rows, columns);
 
 		std::copy(data, data + (_rows * _columns), _data);
+	}
+
+	/*! Matrix
+	* Initialize the matrix as copy of another matrix
+	* Matrix<T> copyMatrix: The matrix to be copied
+	*/
+	template <typename T>
+	Matrix<T>::Matrix(const Matrix<T>& copyMatrix)
+		: Matrix()
+	{
+		resize(copyMatrix._rows, copyMatrix._columns);
+
+		memcpy(_data, copyMatrix._data, sizeof(T) * (_rows * _columns));
+	}
+
+	/*! ~Matrix
+	* Destroy the matrix
+	*/
+	template <typename T>
+	Matrix<T>::~Matrix()
+	{
+		if (_data != nullptr)
+			delete [] _data;
 	}
 
 	/*! resize
@@ -167,8 +193,6 @@ namespace lito{
 	template <typename T>
 	Matrix<T>& Matrix<T>::resize(uint rows, uint columns)
 	{
-		if (_rows >= 0 && _columns >= 0)
-		{
 			_rows = rows;
 			_columns = columns;
 
@@ -179,11 +203,6 @@ namespace lito{
 				_data = new T[_rows * _columns];
 			else
 				_data = nullptr;
-		}
-		else
-		{
-			throw(MatrixException(MatrixExceptionType::INVALID_SIZE, _rows, _columns));
-		}
 
 		return *this;
 	}
@@ -217,6 +236,30 @@ namespace lito{
 
 		return _data[column + (_columns * line)];
 	}
+
+	/*! getRows
+	* Get the value of specific line and column
+	* uint line: Indice of the line
+	* uint column: Indice of the column
+	* return: The value of specific line and column
+	*/
+	template <typename T>
+	const uint& Matrix<T>::getRows() const
+	{
+		return _rows;
+	}
+
+	/*! getColumns
+	* Get the value of specific line and column
+	* uint line: Indice of the line
+	* uint column: Indice of the column
+	* return: The value of specific line and column
+	*/
+	template <typename T>
+	const uint& Matrix<T>::getColumns() const
+	{
+		return _columns;
+	}
 	
 	/*! operator =
 	* Copy the matrix
@@ -226,16 +269,12 @@ namespace lito{
 	template <typename T>
 	Matrix<T>& Matrix<T>::operator = (const Matrix<T>& rec)
 	{
-		try
+		if (this != &rec)
 		{
 			resize(rec._rows, rec._columns);
-		}
-		catch (const MatrixException& me)
-		{
-			throw(me);
-		}
 
-		std::copy(rec._data, rec._data + (_rows * _columns), _data);
+			memcpy(_data, rec._data, sizeof(T) * (_rows * _columns));
+		}
 
 		return *this;
 	}
@@ -246,7 +285,7 @@ namespace lito{
 	* return: The sum of the matrices
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::operator + (const Matrix<T>& sum)
+	Matrix<T> Matrix<T>::operator + (const Matrix<T>& sum) const
 	{
 		if (_rows != sum._rows || _columns != sum._columns)
 			throw(MatrixException(MatrixExceptionType::INCOMPATIBLE_SIZES, _rows, _columns, sum._rows, sum._columns, '+'));
@@ -268,7 +307,7 @@ namespace lito{
 	* return: The subtract of the matrices
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::operator - (const Matrix<T>& sub)
+	Matrix<T> Matrix<T>::operator - (const Matrix<T>& sub) const
 	{
 		if (_rows != sub._rows || _columns != sub._columns)
 			throw(MatrixException(MatrixExceptionType::INCOMPATIBLE_SIZES, _rows, _columns, sub._rows, sub._columns, '-'));
@@ -290,7 +329,7 @@ namespace lito{
 	* return: The multiplication of the matrices
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::operator * (const Matrix<T>& mul)
+	Matrix<T> Matrix<T>::operator * (const Matrix<T>& mul) const
 	{
 		if (_rows != mul._rows || _columns != mul._columns)
 			throw(MatrixException(MatrixExceptionType::INCOMPATIBLE_SIZES, _rows, _columns, mul._rows, mul._columns, '*'));
@@ -312,7 +351,7 @@ namespace lito{
 	* return: The sum of the matrix with matrix identity multiplied to sum value
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::operator + (const T& sum)
+	Matrix<T> Matrix<T>::operator + (const T& sum) const
 	{
 		if (_data == nullptr)
 			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
@@ -331,7 +370,7 @@ namespace lito{
 	* return: The subtraction of the matrix with matrix identity multiplied to sub value
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::operator - (const T& sub)
+	Matrix<T> Matrix<T>::operator - (const T& sub) const
 	{
 		if (_data == nullptr)
 			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
@@ -350,7 +389,7 @@ namespace lito{
 	* return: The multiplication of the matrix with mul value
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::operator * (const T& mul)
+	Matrix<T> Matrix<T>::operator * (const T& mul) const
 	{
 		if (_data == nullptr)
 			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
@@ -369,7 +408,7 @@ namespace lito{
 	* return: The mtrix transposed
 	*/
 	template <typename T>
-	Matrix<T> Matrix<T>::transpose()
+	Matrix<T> Matrix<T>::transpose() const
 	{
 		Matrix<T> newMatrix(_columns, _rows);
 
@@ -380,6 +419,85 @@ namespace lito{
 		}
 
 		return newMatrix;
+	}
+
+	/*! elementarOperationSumLines
+	* Do the elementar operation of sum diferents lines
+	* uint lineMult: Id of the line that will be multiplied
+	* uint lineSum: Id of the line that will be sum
+	* T constMult: The value the line will be mulplied
+	* return: The matrix with sum lines by lineMult times constMult
+	*/
+	template <typename T>
+	Matrix<T>& Matrix<T>::elementarOperationSumLines(const uint &lineMult, const uint &lineSum, const T &constMult)
+	{
+		if (_data == nullptr)
+			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
+
+		for (uint i = 0; i < _columns; i++)
+			(*this)(lineSum, i) += constMult * (*this)(lineMult, i);
+
+		return *this;
+	}
+
+	/*! elementarOperationMultLine
+	* Do the elementar operation of multiply a line by constant
+	* uint line: Id of the line that will be multiplied
+	* T constMult: The value the line will be mulplied
+	* return: The matrix with line multiplied by constMult
+	*/
+	template <typename T>
+	Matrix<T>& Matrix<T>::elementarOperationMultLine(const uint &line, const T &constMult)
+	{
+		if (_data == nullptr)
+			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
+
+		for (uint i = 0; i < _columns; i++)
+			(*this)(line, i) *= constMult;
+
+		return *this;
+	}
+
+	/*! elementarOperationSwitchLines
+	* Switches the lines of matrix
+	* uint line1: Line to be switched
+	* uint line2: Line to be switched
+	* return: The matrix with lines switched
+	*/
+	template <typename T>
+	Matrix<T>& Matrix<T>::elementarOperationSwitchLines(const uint& line1, const uint& line2)
+	{
+		T aux;
+
+		for (uint i = 0; i < _columns; i++)
+		{
+			aux = (*this)(line1, i);
+			(*this)(line1, i) = (*this)(line2, i);
+			(*this)(line2, i) = aux;
+		}
+
+		return *this;
+	}
+
+	/*! elementarOperationSwitchColumns
+	* Switches the columns of matrix
+	* uint line1: Columns to be switched
+	* uint line2: Columns to be switched
+	* return: The matrix with columns switched
+	*/
+	template <typename T>
+	Matrix<T>& Matrix<T>::elementarOperationSwitchColumns(const uint& column1, const uint& column2)
+	{
+		T aux;
+
+		for (uint i = 0; i < _rows; i++)
+		{
+			aux = (*this)(i, column1);
+			(*this)(i, column1) = (*this)(i, column2);
+			(*this)(i, column2) = aux;
+		}
+
+		return *this;
 	}
 
 	/*! operator +
