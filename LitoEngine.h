@@ -9,7 +9,7 @@
 #include "engines/Engine_OpenGl.h"
 #include "engines/Engine_SDL.h"
 #include "shaders/Shader.h"
-#include "algebra/Matrix.hpp"
+#include "algebra/MatrixOperations.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
