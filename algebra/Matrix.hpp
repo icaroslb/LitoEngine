@@ -537,7 +537,7 @@ namespace lito{
 	template <typename T>
 	Matrix<T> operator + (const Matrix<T>& mat)
 	{
-		if (_data == nullptr)
+		if (mat._data == nullptr)
 			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
 
 		return mat;
@@ -551,7 +551,7 @@ namespace lito{
 	template <typename T>
 	Matrix<T> operator - (const Matrix<T>& mat)
 	{
-		if (_data == nullptr)
+		if (mat._data == nullptr)
 			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
 
 		Matrix<T> newMatrix(mat._rows, mat._columns, mat._data);
@@ -611,7 +611,7 @@ namespace lito{
 	template <typename T>
 	Matrix<T> operator * (const T& mul, const Matrix<T>& mat)
 	{
-		if (_data == nullptr)
+		if (mat._data == nullptr)
 			throw(MatrixException(MatrixExceptionType::MATRIX_NOT_INITIALIZED));
 
 		Matrix<T> newMatrix(mat._rows, mat._columns, mat._data);

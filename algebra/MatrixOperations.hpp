@@ -10,6 +10,9 @@ namespace lito {
     template <typename T> Matrix<T> gaussReduction(const Matrix<T>& M, Matrix<T>& rowOperations, Matrix<T>& columnOperations, const T error = T(1e-5));
     template <typename T> Matrix<T> gaussJordanReduction(const Matrix<T>& M, Matrix<T>& rowOperations, Matrix<T>& columnOperations, const T error = T(1e-5));
 
+    template <typename T> Matrix<T> systemResoltionGauss(const Matrix<T>& M, const Matrix<T>& vectorB, const T error = T(1e-5));
+    template <typename T> Matrix<T> systemResoltionGaussJordan(const Matrix<T>& M, const Matrix<T>& vectorB, const T error = T(1e-5));
+
 
 
     /*! partialPivoting
@@ -212,6 +215,64 @@ namespace lito {
             }
         }
         return reduction;
+    }
+
+    /*! systemResoltionGauss
+    * Calculate the system Ax=b by Gauss reduction
+    * Matrix<T> M: The matrix A
+    * Matrix<T> vectorB: The vector b
+    * T error: The error value
+    * return: The vector x
+    */
+    template <typename T>
+    Matrix<T> systemResoltionGauss(const Matrix<T>& M, const Matrix<T>& vectorB, const T error)
+    {
+        Matrix<T> matrixReduction;
+        Matrix<T> rowsOperations;
+        Matrix<T> columnsOperations;
+        Matrix<T> vectorReduction;
+        Matrix<T> vectorReturn = Matrix<T>(vectorB.getRows(), vectorB.getColumns());
+
+        uint rowCalculated;
+        uint columnCalculated;
+
+        matrixReduction = gaussReduction(M, rowsOperations, columnsOperations, error);
+        vectorReduction = ((rowsOperations * vectorB).transpose() * columnsOperations).transpose();
+
+        for (uint i = 0; i < matrixReduction.getRows(); i++)
+        {
+            rowCalculated = matrixReduction.getRows() - i - 1;
+            
+            for (uint j = 0; j < i; j++)
+            {
+                columnCalculated = matrixReduction.getColumns() - j - 1;
+
+                for (uint k = 0; k < vectorReduction.getColumns(); k++)
+                    vectorReduction(rowCalculated, k) -= matrixReduction(rowCalculated, columnCalculated) * vectorReturn(columnCalculated, k);
+            }
+
+            for (uint k = 0; k < vectorReduction.getColumns(); k++)
+                vectorReturn(rowCalculated, k) = vectorReduction(rowCalculated, k) / matrixReduction(rowCalculated, rowCalculated);
+        }
+
+        return vectorReturn;
+    }
+
+    /*! systemResoltionGaussJordan
+    * Calculate the system Ax=b by Gauss reduction
+    * Matrix<T> M: The matrix A
+    * Matrix<T> vectorB: The vector b
+    * T error: The error value
+    * return: The vector x
+    */
+    template <typename T>
+    Matrix<T> systemResoltionGaussJordan(const Matrix<T>& M, const Matrix<T>& vectorB, const T error)
+    {
+        Matrix<T> rowsOperations;
+        Matrix<T> columnsOperations;
+
+        gaussJordanReduction(M, rowsOperations, columnsOperations, error);
+        return ((rowsOperations * vectorB).transpose() * columnsOperations).transpose();
     }
 
 }

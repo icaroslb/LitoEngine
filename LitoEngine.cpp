@@ -33,13 +33,8 @@ int main()
 
 	try {
 		std::cout
-			<< result << std::endl
-			<< "Row operation:" << rowOperation << std::endl
-			<< "Column operation:" << columnOperation << std::endl
-			<< "Matrix to be reducted:" << matReduction << std::endl
-			<< "Rows operations x matrix:"<< rowOperation * matReduction << std::endl
-			<< "matrix x Columns operations"<< matReduction * columnOperation << std::endl
-			<< "Rows operations x matrix x Columns operations" << rowOperation * matReduction * columnOperation << std::endl;
+			<< lito::systemResoltionGauss(matrix, vector) << std::endl
+			<< lito::systemResoltionGaussJordan(matrix, vector) << std::endl;
 	}
 	catch (lito::MatrixException me)
 	{
