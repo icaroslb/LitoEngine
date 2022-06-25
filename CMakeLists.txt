@@ -10,12 +10,9 @@
 #
 # TODO: Adicione testes e instale destinos, se necessário.
 
-#find_package(SDL2 REQUIRED)
-#find_package(GLEW REQUIRED)
-#find_package(OpenGL REQUIRED)
-add_subdirectory(libs/SDL2)
-add_subdirectory(libs/glew/build/cmake)
-add_subdirectory(libs/glm-master)
+find_package(SDL2 REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_library(
     LITO_ENGINES STATIC
