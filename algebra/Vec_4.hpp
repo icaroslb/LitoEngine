@@ -19,14 +19,15 @@ namespace lito {
 		};
 		
 		Vec_4<T> ( T x = 0, T y = 0, T z = 0, T w = 0 );
+		Vec_4<T> ( const Vec_4<T> &v );
 		
-		T& x ();
+		T&       x ();
 		const T& x () const;
-		T& y ();
+		T&       y ();
 		const T& y () const;
-		T& z ();
+		T&       z ();
 		const T& z () const;
-		T& w ();
+		T&       w ();
 		const T& w () const;
 		
 		T&       operator [] ( int i );
@@ -86,6 +87,12 @@ namespace lito {
 	, _z( z )
 	, _w( w )
 	{}
+	/*===============================================================================================================================*/
+	template <class T>
+	Vec_4<T>::Vec_4 ( const Vec_4<T> &v )
+	{
+		*this = v;
+	}
 	/*===============================================================================================================================*/
 	template <class T>
 	T& Vec_4<T>::x () { return _x; }

@@ -1,6 +1,7 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include <iostream>
 #include <cstdint>
 #include <cstring>
 #include <algorithm>

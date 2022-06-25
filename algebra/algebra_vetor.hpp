@@ -10,17 +10,17 @@
 
 namespace lito {
 
-	template <class T> T dotProduct ( const Vec_2<T> &v1, const Vec_2<T> &v2 );
-	template <class T> T dotProduct ( const Vec_3<T> &v1, const Vec_3<T> &v2 );
-	template <class T> T dotProduct ( const Vec_4<T> &v1, const Vec_4<T> &v2 );
+	template <class T> T dot ( const Vec_2<T> &v1, const Vec_2<T> &v2 );
+	template <class T> T dot ( const Vec_3<T> &v1, const Vec_3<T> &v2 );
+	template <class T> T dot ( const Vec_4<T> &v1, const Vec_4<T> &v2 );
 	
-	template <class T> T        crossProduct ( const Vec_2<T> &v1, const Vec_2<T> &v2 );
-	template <class T> Vec_3<T> crossProduct ( const Vec_3<T> &v1, const Vec_3<T> &v2 );
-	template <class T> Vec_4<T> crossProduct ( const Vec_4<T> &v1, const Vec_4<T> &v2 );
+	template <class T> T        cross ( const Vec_2<T> &v1, const Vec_2<T> &v2 );
+	template <class T> Vec_3<T> cross ( const Vec_3<T> &v1, const Vec_3<T> &v2 );
+	template <class T> Vec_4<T> cross ( const Vec_4<T> &v1, const Vec_4<T> &v2 );
 	
-	template <class T> T quadractNorm ( const Vec_2<T> &v );
-	template <class T> T quadractNorm ( const Vec_3<T> &v );
-	template <class T> T quadractNorm ( const Vec_4<T> &v );
+	template <class T> T norm2 ( const Vec_2<T> &v );
+	template <class T> T norm2 ( const Vec_3<T> &v );
+	template <class T> T norm2 ( const Vec_4<T> &v );
 	
 	template <class T> T norm ( const Vec_2<T> &v );
 	template <class T> T norm ( const Vec_3<T> &v );
@@ -72,7 +72,7 @@ namespace lito {
 	template <class T> T pseudoAngle ( const Vec_3<T> &v1, const Vec_3<T> &v2, const Vec_3<T> &axis1, const Vec_3<T> &axis2 );
 	template <class T> T pseudoAngle ( const Vec_4<T> &v );
 	
-	template <class T> T pseudoangleCosValue ( const Vec_2<T> &v1, const Vec_2<T> &v2 );
+	template <class T> T pseudoAngleCosValue ( const Vec_2<T> &v1, const Vec_2<T> &v2 );
 	
 	template <class T> T orientedAngle ( const Vec_2<T> &v );
 	template <class T> T orientedAngle ( const Vec_2<T> &u, const Vec_2<T> &v );
@@ -98,76 +98,76 @@ namespace lito {
 	/*********************************************************************************************************************************/
 	/*********************************************************************************************************************************/
 	
-	/*! dotProduct
+	/*! dot
 	* Do the dot product
 	* Vec_2<T> v1: Vector 2D
 	* Vec_2<T> v2: Vector 2D
 	* return: The value of the dot product of v1 with v2
 	*/
 	template <class T>
-	T dotProduct ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
+	T dot ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
 	{
 		return ( v1._x * v2._x ) + ( v1._y * v2._y );
 	}
 	
-	/*! dotProduct
+	/*! dot
 	* Do the dot product
 	* Vec_3<T> v1: Vector 3D
 	* Vec_3<T> v2: Vector 3D
 	* return: The value of the dot product of v1 with v2
 	*/
 	template <class T>
-	T dotProduct ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
+	T dot ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
 	{
 		return ( v1._x * v2._x ) + ( v1._y * v2._y ) + ( v1._z * v2._z );
 	}
 	
-	/*! dotProduct
+	/*! dot
 	* Do the dot product
 	* Vec_4<T> v1: Vector 4D
 	* Vec_4<T> v2: Vector 4D
 	* return: The value of the dot product of v1 with v2
 	*/
 	template <class T>
-	T dotProduct ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
+	T dot ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
 	{
 		return ( v1._x * v2._x ) + ( v1._y * v2._y ) + ( v1._z * v2._z ) + ( v1._w * v2._w );
 	}
 	
-	/*! crossProduct
+	/*! cross
 	* Do the cross product
 	* Vec_2<T> v1: Vector 2D
 	* Vec_2<T> v2: Vector 2D
 	* return: The value of the cross product of v1 with v2
 	*/
 	template <class T>
-	T crossProduct ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
+	T cross ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
 	{
 		return ( v1._x * v2._y ) - ( v1._y * v2._x );
 	}
 	
-	/*! crossProduct
+	/*! cross
 	* Do the cross product
 	* Vec_3<T> v1: Vector 3D
 	* Vec_3<T> v2: Vector 3D
 	* return: The Vec_3<T> result of the cross product of v1 with v2
 	*/
 	template <class T>
-	Vec_3<T> crossProduct ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
+	Vec_3<T> cross ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
 	{
 		return Vec_3<T>( ( v1._y * v2._z ) - ( v1._z * v2._y ),
 		                 ( v1._z * v2._x ) - ( v1._x * v2._z ),
 		                 ( v1._x * v2._y ) - ( v1._y * v2._x ) );
 	}
 	
-	/*! crossProduct
+	/*! cross
 	* Do the cross product
 	* Vec_4<T> v1: Vector 4D
 	* Vec_4<T> v2: Vector 4D
 	* return: The Vec_3<T> result of the cross product of v1 with v2
 	*/
 	template <class T>
-	Vec_4<T> crossProduct ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
+	Vec_4<T> cross ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
 	{
 		return Vec_4<T>( ( v1._y * v2._z ) - ( v1._z * v2._y ),
 		                 ( v1._z * v2._x ) - ( v1._x * v2._z ),
@@ -175,35 +175,35 @@ namespace lito {
 		                 0 );
 	}
 	
-	/*! quadractNorm
+	/*! norm2
 	* Calculate the quadract length of the vector
 	* Vec_2<T> v: Vector 2D
 	* return: The quadract length of the vector
 	*/
 	template <class T>
-	T quadractNorm ( const Vec_2<T> &v )
+	T norm2 ( const Vec_2<T> &v )
 	{
 		return ( v._x * v._x ) + ( v._y * v._y );
 	}
 	
-	/*! quadractNorm
+	/*! norm2
 	* Calculate the quadract length of the vector
 	* Vec_3<T> v: Vector 3D
 	* return: The quadract length of the vector
 	*/
 	template <class T>
-	T quadractNorm ( const Vec_3<T> &v )
+	T norm2 ( const Vec_3<T> &v )
 	{
 		return ( v._x * v._x ) + ( v._y * v._y ) + ( v._z * v._z );
 	}
 	
-	/*! quadractNorm
+	/*! norm2
 	* Calculate the quadract length of the vector
 	* Vec_4<T> v: Vector 4D
 	* return: The quadract length of the vector
 	*/
 	template <class T>
-	T quadractNorm ( const Vec_4<T> &v )
+	T norm2 ( const Vec_4<T> &v )
 	{
 		return ( v._x * v._x ) + ( v._y * v._y ) + ( v._z * v._z ) + ( v._w * v._w );
 	}
@@ -216,7 +216,7 @@ namespace lito {
 	template <class T>
 	T norm ( const Vec_2<T> &v )
 	{
-		return T( sqrt( quadractNorm( v ) ) );
+		return T( sqrt( norm2( v ) ) );
 	}
 	
 	/*! norm
@@ -227,7 +227,7 @@ namespace lito {
 	template <class T>
 	T norm ( const Vec_3<T> &v )
 	{
-		return T( sqrt( quadractNorm( v ) ) );
+		return T( sqrt( norm2( v ) ) );
 	}
 	
 	/*! norm
@@ -238,7 +238,7 @@ namespace lito {
 	template <class T>
 	T norm ( const Vec_4<T> &v )
 	{
-		return T( sqrt( quadractNorm( v ) ) );
+		return T( sqrt( norm2( v ) ) );
 	}
 	
 	
@@ -299,7 +299,7 @@ namespace lito {
 	template <class T>
 	Vec_2<T> projection ( const Vec_2<T> &v, const Vec_2<T> &v_proje )
 	{
-		return ( dotProduct( v, v_proje ) / quadractNorm( v_proje ) ) * v_proje;
+		return ( dot( v, v_proje ) / norm2( v_proje ) ) * v_proje;
 	}
 	
 	/*! projection
@@ -311,7 +311,7 @@ namespace lito {
 	template <class T>
 	Vec_3<T> projection ( const Vec_3<T> &v, const Vec_3<T> &v_proje )
 	{
-		return ( dotProduct( v, v_proje ) / quadractNorm( v_proje ) ) * v_proje;
+		return ( dot( v, v_proje ) / norm2( v_proje ) ) * v_proje;
 	}
 	
 	/*! projection
@@ -336,7 +336,7 @@ namespace lito {
 	template <class T>
 	Vec_4<T> projection ( const Vec_4<T> &v, const Vec_4<T> &v_proje )
 	{
-		return ( dotProduct( v, v_proje ) / quadractNorm( v_proje ) ) * v_proje;
+		return ( dot( v, v_proje ) / norm2( v_proje ) ) * v_proje;
 	}
 	
 	/*! projectionValue
@@ -348,7 +348,7 @@ namespace lito {
 	template <class T>
 	T projectionValue ( const Vec_2<T> &v, const Vec_2<T> &v_proje )
 	{
-		return dotProduct( v, v_proje ) / quadractNorm( v_proje );
+		return dot( v, v_proje ) / norm2( v_proje );
 	}
 	
 	/*! projectionValue
@@ -360,7 +360,7 @@ namespace lito {
 	template <class T>
 	T projectionValue ( const Vec_3<T> &v, const Vec_3<T> &v_proje )
 	{
-		return dotProduct( v, v_proje ) / quadractNorm( v_proje );
+		return dot( v, v_proje ) / norm2( v_proje );
 	}
 	
 	/*! projectionValue
@@ -372,7 +372,7 @@ namespace lito {
 	template <class T>
 	T projectionValue ( const Vec_4<T> &v, const Vec_4<T> &v_proje )
 	{
-		return dotProduct( v, v_proje ) / quadractNorm( v_proje );
+		return dot( v, v_proje ) / norm2( v_proje );
 	}
 	
 	/*! projectionUnitary
@@ -384,7 +384,7 @@ namespace lito {
 	template <class T>
 	Vec_2<T> projectionUnitary ( const Vec_2<T> &v, const Vec_2<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary ) * v_proje_unitary;
+		return dot( v, v_proje_unitary ) * v_proje_unitary;
 	}
 	
 	/*! projectionUnitary
@@ -396,7 +396,7 @@ namespace lito {
 	template <class T>
 	Vec_3<T> projectionUnitary ( const Vec_3<T> &v, const Vec_3<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary ) * v_proje_unitary;
+		return dot( v, v_proje_unitary ) * v_proje_unitary;
 	}
 	
 	/*! projectionUnitary
@@ -408,7 +408,7 @@ namespace lito {
 	template <class T>
 	Vec_4<T> projectionUnitary ( const Vec_4<T> &v, const Vec_4<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary ) * v_proje_unitary;
+		return dot( v, v_proje_unitary ) * v_proje_unitary;
 	}
 	
 	/*! projectionUnitaryValue
@@ -420,7 +420,7 @@ namespace lito {
 	template <class T>
 	T projectionUnitaryValue ( const Vec_2<T> &v, const Vec_2<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary );
+		return dot( v, v_proje_unitary );
 	}
 	
 	/*! projectionUnitaryValue
@@ -432,7 +432,7 @@ namespace lito {
 	template <class T>
 	T projectionUnitaryValue ( const Vec_3<T> &v, const Vec_3<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary );
+		return dot( v, v_proje_unitary );
 	}
 	
 	/*! projectionUnitaryValue
@@ -444,7 +444,7 @@ namespace lito {
 	template <class T>
 	T projectionUnitaryValue ( const Vec_4<T> &v, const Vec_4<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary );
+		return dot( v, v_proje_unitary );
 	}
 	
 	/*! projectionInverse
@@ -456,7 +456,7 @@ namespace lito {
 	template <class T>
 	Vec_2<T> projectionInverse ( const Vec_2<T> &v, const Vec_2<T> &v_proje )
 	{
-		return ( crossProduct( v_proje, v ) / norm( v_proje ) );
+		return ( cross( v_proje, v ) / norm( v_proje ) );
 	}
 	
 	/*! projectionInverse
@@ -468,7 +468,7 @@ namespace lito {
 	template <class T>
 	Vec_3<T> projectionInverse ( const Vec_3<T> &v, const Vec_3<T> &v_proje )
 	{
-		return ( dotProduct( v, v_proje ) / quadractNorm( v_proje ) ) * v_proje;
+		return ( dot( v, v_proje ) / norm2( v_proje ) ) * v_proje;
 	}
 	
 	/*! projectionInverse
@@ -480,7 +480,7 @@ namespace lito {
 	template <class T>
 	Vec_4<T> projectionInverse ( const Vec_4<T> &v, const Vec_4<T> &v_proje )
 	{
-		return ( dotProduct( v, v_proje ) / quadractNorm( v_proje ) ) * v_proje;
+		return ( dot( v, v_proje ) / norm2( v_proje ) ) * v_proje;
 	}
 	
 	/*! projectionInverseUnitary
@@ -492,7 +492,7 @@ namespace lito {
 	template <class T>
 	Vec_2<T> projectionInverseUnitary ( const Vec_2<T> &v, const Vec_2<T> &v_proje_unitary )
 	{
-		return crossProduct( v, v_proje_unitary ) * v_proje_unitary;
+		return cross( v, v_proje_unitary ) * v_proje_unitary;
 	}
 	
 	/*! projectionInverseUnitary
@@ -504,7 +504,7 @@ namespace lito {
 	template <class T>
 	Vec_3<T> projectionInverseUnitary ( const Vec_3<T> &v, const Vec_3<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary ) * v_proje_unitary;
+		return dot( v, v_proje_unitary ) * v_proje_unitary;
 	}
 	
 	/*! projectionInverseUnitary
@@ -516,7 +516,7 @@ namespace lito {
 	template <class T>
 	Vec_4<T> projectionInverseUnitary ( const Vec_4<T> &v, const Vec_4<T> &v_proje_unitary )
 	{
-		return dotProduct( v, v_proje_unitary ) * v_proje_unitary;
+		return dot( v, v_proje_unitary ) * v_proje_unitary;
 	}
 	
 	/*! angleCos
@@ -528,7 +528,7 @@ namespace lito {
 	template <class T>
 	T angleCos ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
 	{
-		return truncation( dotProduct( v1, v2 ) / T( sqrt( quadractNorm( v1 ) * quadractNorm( v2 ) ) ) );
+		return truncation( dot( v1, v2 ) / T( sqrt( norm2( v1 ) * norm2( v2 ) ) ) );
 	}
 	
 	/*! angleCos
@@ -540,7 +540,7 @@ namespace lito {
 	template <class T>
 	T angleCos ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
 	{
-		return truncation( dotProduct( v1, v2 ) / T( sqrt( quadractNorm( v1 ) * quadractNorm( v2 ) ) ) );
+		return truncation( dot( v1, v2 ) / T( sqrt( norm2( v1 ) * norm2( v2 ) ) ) );
 	}
 	
 	/*! angleCos
@@ -552,7 +552,7 @@ namespace lito {
 	template <class T>
 	T angleCos ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
 	{
-		return truncation( dotProduct( v1, v2 ) / T( sqrt( quadractNorm( v1 ) * quadractNorm( v2 ) ) ) );
+		return truncation( dot( v1, v2 ) / T( sqrt( norm2( v1 ) * norm2( v2 ) ) ) );
 	}
 	
 	/*! angleSin
@@ -564,7 +564,7 @@ namespace lito {
 	template <class T>
 	T angleSin ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
 	{
-		return truncation( crossProduct( v1, v2 ) / T( sqrt( quadractNorm( v1 ) * quadractNorm( v2 ) ) ) );
+		return truncation( cross( v1, v2 ) / T( sqrt( norm2( v1 ) * norm2( v2 ) ) ) );
 	}
 	
 	/*! angleSin
@@ -576,7 +576,7 @@ namespace lito {
 	template <class T>
 	T angleSin ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
 	{
-		return truncation( norm( crossProduct( v1, v2 ) ) / T( sqrt( quadractNorm( v1 ) * quadractNorm( v2 ) ) ) );
+		return truncation( norm( cross( v1, v2 ) ) / T( sqrt( norm2( v1 ) * norm2( v2 ) ) ) );
 	}
 	
 	/*! angleSin
@@ -588,7 +588,7 @@ namespace lito {
 	template <class T>
 	T angleSin ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
 	{
-		return truncation( norm( crossProduct( v1, v2 ) ) / T( sqrt( quadractNorm( v1 ) * quadractNorm( v2 ) ) ) );
+		return truncation( norm( cross( v1, v2 ) ) / T( sqrt( norm2( v1 ) * norm2( v2 ) ) ) );
 	}
 	
 	/*! angleCosValue
@@ -712,14 +712,14 @@ namespace lito {
 	
 	}
 	
-	/*! pseudoangleCosValue
+	/*! pseudoAngleCosValue
 	* Calculate the pseudoangle from cos betewen [0, 2] betewen vectors v1 and v2
 	* Vec_2<T> v1: Vector 2D
 	* Vec_2<T> v2: Vector 2D
 	* return: The pseudoangle betewen vectors v1 and v2
 	*/
 	template <class T>
-	T pseudoangleCosValue ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
+	T pseudoAngleCosValue ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
 	{
 		return T(1) - angleCos(v1, v2);
 	}
@@ -805,8 +805,8 @@ namespace lito {
 		const Vec_2<T> v_1 = l1_v2 - l1_v1;
 		const Vec_2<T> v_2 = l2_v2 - l2_v1;
 	
-		const T value_1 = crossProduct( v_1, l2_v1 - l1_v1 ) * crossProduct( v_1, l2_v2 - l1_v1 );
-		const T value_2 = crossProduct( v_2, l1_v1 - l2_v1 ) * crossProduct( v_2, l1_v2 - l2_v1 );
+		const T value_1 = cross( v_1, l2_v1 - l1_v1 ) * cross( v_1, l2_v2 - l1_v1 );
+		const T value_2 = cross( v_2, l1_v1 - l2_v1 ) * cross( v_2, l1_v2 - l2_v1 );
 	
 		if ( value_1 <= T(0) && value_2 <= T(0) )
 			return true;
@@ -829,8 +829,8 @@ namespace lito {
 		const Vec_3<T> v_1 = l1_v2 - l1_v1;
 		const Vec_3<T> v_2 = l2_v2 - l2_v1;
 	
-		const T value_1 = lito::dotProduct( crossProduct( v_1, l2_v1 - l1_v1 ), crossProduct( v_1, l2_v2 - l1_v1 ) );
-		const T value_2 = lito::dotProduct( crossProduct( v_2, l1_v1 - l2_v1 ), crossProduct( v_2, l1_v2 - l2_v1 ) );
+		const T value_1 = lito::dot( cross( v_1, l2_v1 - l1_v1 ), cross( v_1, l2_v2 - l1_v1 ) );
+		const T value_2 = lito::dot( cross( v_2, l1_v1 - l2_v1 ), cross( v_2, l1_v2 - l2_v1 ) );
 	
 		if ( value_1 <= T(0) && value_2 <= T(0) )
 			return true;
@@ -855,8 +855,8 @@ namespace lito {
 		const Vec_3<T> v_1 = f1_v2 - f1_v1;
 		const Vec_3<T> v_2 = f2_v2 - f2_v1;
 	
-		const T value_1 = lito::dotProduct( crossProduct( v_1, f2_v1 - f1_v1 ), crossProduct( v_1, f2_v2 - f1_v1 ) );
-		const T value_2 = lito::dotProduct( crossProduct( v_2, f1_v1 - f2_v1 ), crossProduct( v_2, f1_v2 - f2_v1 ) );
+		const T value_1 = lito::dot( cross( v_1, f2_v1 - f1_v1 ), cross( v_1, f2_v2 - f1_v1 ) );
+		const T value_2 = lito::dot( cross( v_2, f1_v1 - f2_v1 ), cross( v_2, f1_v2 - f2_v1 ) );
 	
 		if ( value_1 <= T(0) && value_2 <= T(0) )
 			return true;
@@ -870,7 +870,7 @@ namespace lito {
 		T area = T(0);
 		
 		for (int i = 0; i < tamanho; i++)
-			area += crossProduct(pontos[i], pontos[(i+1) % tamanho]);
+			area += cross(pontos[i], pontos[(i+1) % tamanho]);
 		
 		return area / T(2);
 	}

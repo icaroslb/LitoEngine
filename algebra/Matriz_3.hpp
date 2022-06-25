@@ -18,8 +18,9 @@ namespace lito {
 		Matriz_3<T> ( const MatrixType &tipo );
 		Matriz_3<T> ( T v0, T v1, T v2, T v3, T v4, T v5, T v6, T v7, T v8 );
 		Matriz_3<T> ( const T *valor );
+		Matriz_3<T> ( const Matriz_3<T> &m );
 		
-		T&          operator () ( const size_t linha, const size_t coluna );
+		T&           operator () ( const size_t linha, const size_t coluna );
 		
 		Matriz_3<T>  operator  + ( const Matriz_3<T> &m );
 		Matriz_3<T>  operator  - ( const Matriz_3<T> &m );
@@ -106,6 +107,12 @@ namespace lito {
 	Matriz_3<T>::Matriz_3( const T *valor )
 	{
 		memcpy( _val, valor, sizeof(T) * 9 );
+	}
+	/*===============================================================================================================================*/
+	template <class T>
+	Matriz_3<T>::Matriz_3 ( const Matriz_3<T> &m )
+	{
+		*this = m;
 	}
 	/*===============================================================================================================================*/
 	template <class T>

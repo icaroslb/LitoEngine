@@ -19,8 +19,9 @@ namespace lito {
 		Matriz_4<T> ( const MatrixType &type );
 		Matriz_4<T> ( T v0, T v1, T v2, T v3, T v4, T v5, T v6, T v7, T v8, T v9, T v10, T v11, T v12, T v13, T v14, T v15 );
 		Matriz_4<T> ( const T *valor );
+		Matriz_4<T> ( const Matriz_4<T> &m );
 		
-		T&          operator () ( const size_t linha, const size_t coluna );
+		T&           operator () ( const size_t linha, const size_t coluna );
 		
 		Matriz_4<T>  operator  + ( const Matriz_4<T> &m );
 		Matriz_4<T>  operator  - ( const Matriz_4<T> &m );
@@ -116,6 +117,12 @@ namespace lito {
 	Matriz_4<T>::Matriz_4( const T *valor )
 	{
 		memcpy( _val, valor, sizeof(T) * 16 );
+	}
+	/*===============================================================================================================================*/
+	template <class T>
+	Matriz_4<T>::Matriz_4 ( const Matriz_4<T> &m )
+	{
+		*this = m;
 	}
 	/*===============================================================================================================================*/
 	template <class T>

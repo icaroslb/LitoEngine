@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <algorithm>
-#include "matriz_enum.hpp"
+#include "MatrixEnum.hpp"
 #include "Vec_2.hpp"
 
 namespace lito {
@@ -19,8 +19,9 @@ namespace lito {
 		Matriz_2<T> ( const MatrixType &tipo );
 		Matriz_2<T> ( T v0, T v1, T v2, T v3 );
 		Matriz_2<T> ( const T *valor );
+		Matriz_2<T> ( const Matriz_2<T> &m );
 		
-		T&          operator () ( const size_t linha, const size_t coluna );
+		T&           operator () ( const size_t linha, const size_t coluna );
 		
 		Matriz_2<T>  operator  + ( const Matriz_2<T> &m );
 		Matriz_2<T>  operator  - ( const Matriz_2<T> &m );
@@ -99,6 +100,12 @@ namespace lito {
 	Matriz_2<T>::Matriz_2( const T *valor )
 	{
 		memcpy( _val, valor, sizeof(T) * 4 );
+	}
+	/*===============================================================================================================================*/
+	template <class T>
+	Matriz_2<T>::Matriz_2 ( const Matriz_2<T> &m )
+	{
+		*this = m;
 	}
 	/*===============================================================================================================================*/
 	template <class T>
