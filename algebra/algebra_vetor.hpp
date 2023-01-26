@@ -107,7 +107,7 @@ namespace lito {
 	template <class T>
 	T dot ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
 	{
-		return ( v1._x * v2._x ) + ( v1._y * v2._y );
+		return ( v1.x() * v2.x() ) + ( v1.y() * v2.y() );
 	}
 	
 	/*! dot
@@ -119,7 +119,7 @@ namespace lito {
 	template <class T>
 	T dot ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
 	{
-		return ( v1._x * v2._x ) + ( v1._y * v2._y ) + ( v1._z * v2._z );
+		return ( v1.x() * v2.x() ) + ( v1.y() * v2.y() ) + ( v1.z() * v2.z() );
 	}
 	
 	/*! dot
@@ -131,7 +131,7 @@ namespace lito {
 	template <class T>
 	T dot ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
 	{
-		return ( v1._x * v2._x ) + ( v1._y * v2._y ) + ( v1._z * v2._z ) + ( v1._w * v2._w );
+		return ( v1.x() * v2.x() ) + ( v1.y() * v2.y() ) + ( v1.z() * v2.z() ) + ( v1.w() * v2.w() );
 	}
 	
 	/*! cross
@@ -143,7 +143,7 @@ namespace lito {
 	template <class T>
 	T cross ( const Vec_2<T> &v1, const Vec_2<T> &v2 )
 	{
-		return ( v1._x * v2._y ) - ( v1._y * v2._x );
+		return ( v1.x() * v2.y() ) - ( v1.y() * v2.x() );
 	}
 	
 	/*! cross
@@ -155,9 +155,9 @@ namespace lito {
 	template <class T>
 	Vec_3<T> cross ( const Vec_3<T> &v1, const Vec_3<T> &v2 )
 	{
-		return Vec_3<T>( ( v1._y * v2._z ) - ( v1._z * v2._y ),
-		                 ( v1._z * v2._x ) - ( v1._x * v2._z ),
-		                 ( v1._x * v2._y ) - ( v1._y * v2._x ) );
+		return Vec_3<T>( ( v1.y() * v2.z() ) - ( v1.z() * v2.y() ),
+		                 ( v1.z() * v2.x() ) - ( v1.x() * v2.z() ),
+		                 ( v1.x() * v2.y() ) - ( v1.y() * v2.x() ) );
 	}
 	
 	/*! cross
@@ -169,9 +169,9 @@ namespace lito {
 	template <class T>
 	Vec_4<T> cross ( const Vec_4<T> &v1, const Vec_4<T> &v2 )
 	{
-		return Vec_4<T>( ( v1._y * v2._z ) - ( v1._z * v2._y ),
-		                 ( v1._z * v2._x ) - ( v1._x * v2._z ),
-		                 ( v1._x * v2._y ) - ( v1._y * v2._x ),
+		return Vec_4<T>( ( v1.y() * v2.z() ) - ( v1.z() * v2.y() ),
+		                 ( v1.z() * v2.x() ) - ( v1.x() * v2.z() ),
+		                 ( v1.x() * v2.y() ) - ( v1.y() * v2.x() ),
 		                 0 );
 	}
 	
@@ -183,7 +183,7 @@ namespace lito {
 	template <class T>
 	T norm2 ( const Vec_2<T> &v )
 	{
-		return ( v._x * v._x ) + ( v._y * v._y );
+		return ( v.x() * v.x() ) + ( v.y() * v.y() );
 	}
 	
 	/*! norm2
@@ -194,7 +194,7 @@ namespace lito {
 	template <class T>
 	T norm2 ( const Vec_3<T> &v )
 	{
-		return ( v._x * v._x ) + ( v._y * v._y ) + ( v._z * v._z );
+		return ( v.x() * v.x() ) + ( v.y() * v.y() ) + ( v.z() * v.z() );
 	}
 	
 	/*! norm2
@@ -205,7 +205,7 @@ namespace lito {
 	template <class T>
 	T norm2 ( const Vec_4<T> &v )
 	{
-		return ( v._x * v._x ) + ( v._y * v._y ) + ( v._z * v._z ) + ( v._w * v._w );
+		return ( v.x() * v.x() ) + ( v.y() * v.y() ) + ( v.z() * v.z() ) + ( v.w() * v.w() );
 	}
 	
 	/*! norm

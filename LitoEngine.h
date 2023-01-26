@@ -9,11 +9,7 @@
 #include "engines/Engine_OpenGl.h"
 #include "engines/Engine_SDL.h"
 #include "shaders/Shader.h"
-#include "algebra/MatrixOperations.hpp"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "algebra/algebra_matriz.hpp"
 
 // TODO: Referencie os cabeçalhos adicionais de que seu programa precisa aqui.
 

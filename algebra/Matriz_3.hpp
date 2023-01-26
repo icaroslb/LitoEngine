@@ -20,7 +20,8 @@ namespace lito {
 		Matriz_3<T> ( const T *valor );
 		Matriz_3<T> ( const Matriz_3<T> &m );
 		
-		T&           operator () ( const size_t linha, const size_t coluna );
+		inline       T& operator () ( const size_t &line, const size_t &column );
+		inline const T& operator () ( const size_t &line, const size_t &column ) const;
 		
 		Matriz_3<T>  operator  + ( const Matriz_3<T> &m );
 		Matriz_3<T>  operator  - ( const Matriz_3<T> &m );
@@ -116,10 +117,17 @@ namespace lito {
 	}
 	/*===============================================================================================================================*/
 	template <class T>
-	T& Matriz_3<T>::operator () ( const size_t linha,  const size_t coluna )
+	T& Matriz_3<T>::operator () ( const size_t &line,  const size_t &column )
 	{
-		if ( coluna < 3 && linha < 3 )
-			return _val[ ( linha * 3 ) + coluna ];
+		if ( column < 3 && line < 3 )
+			return _val[ ( line * 3 ) + column ];
+	}
+	/*===============================================================================================================================*/
+	template <class T>
+	const T& Matriz_3<T>::operator () ( const size_t &line,  const size_t &column ) const
+	{
+		if ( column < 3 && line < 3 )
+			return _val[ ( line * 3 ) + column ];
 	}
 	/*===============================================================================================================================*/
 	template <class T>

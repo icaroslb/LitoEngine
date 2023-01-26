@@ -21,7 +21,8 @@ namespace lito {
 		Matriz_4<T> ( const T *valor );
 		Matriz_4<T> ( const Matriz_4<T> &m );
 		
-		T&           operator () ( const size_t linha, const size_t coluna );
+		inline       T& operator () ( const size_t &line, const size_t &column );
+		inline const T& operator () ( const size_t &line, const size_t &column ) const;
 		
 		Matriz_4<T>  operator  + ( const Matriz_4<T> &m );
 		Matriz_4<T>  operator  - ( const Matriz_4<T> &m );
@@ -126,10 +127,17 @@ namespace lito {
 	}
 	/*===============================================================================================================================*/
 	template <class T>
-	T& Matriz_4<T>::operator () ( const size_t linha,  const size_t coluna )
+	T& Matriz_4<T>::operator () ( const size_t &line,  const size_t &column )
 	{
-		if ( coluna < 4 && linha < 4 )
-			return _val[ ( linha * 4 ) + coluna ];
+		if ( column < 4 && line < 4 )
+			return _val[ ( line * 4 ) + column ];
+	}
+	/*===============================================================================================================================*/
+	template <class T>
+	const T& Matriz_4<T>::operator () ( const size_t &line,  const size_t &column ) const
+	{
+		if ( column < 4 && line < 4 )
+			return _val[ ( line * 4 ) + column ];
 	}
 	/*===============================================================================================================================*/
 	template <class T>
